@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHOSIM – 도감</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+
+<body>
+  <!-- 상단 -->
+  <header class="book-top">
+    <div class="book-title">나의 초심 도감</div>
+    <a href="./index.html" class="hud-btn">이전</a>
+  </header>
+
+  <!-- 리스트 -->
+  <main>
+    <div class="book-grid" id="bookGrid"></div>
+    <div class="book-empty" id="bookEmpty" aria-hidden="true">
+      아직 기록된 돌이 없습니다.<br>그만 닦기를 선택하면 자동으로 기록됩니다.
+    </div>
+  </main>
+
+  <script src="./src/collection.js"></script>
+</body>
+</html>

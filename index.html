@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHOSIM</title>
+  <link rel="stylesheet" href="./src/style.css" />
+
+  <script>
+    (function(d) {
+      var config = { kitId: 'izl5xxv', scriptTimeout: 3000, async: true },
+      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),
+      tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;
+      h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;
+      tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};
+      s.parentNode.insertBefore(tk,s)
+    })(document);
+  </script>
+</head>
+
+<body>
+  <header class="top-bar">
+    <div class="hud-left" id="hudLeft"></div>
+    <div class="companion" id="companion"></div>
+    <div class="hud-right" id="hudRight"></div>
+  </header>
+
+  <main class="stage">
+    <div class="stone-wrap" id="stoneWrap">
+      <canvas id="baseCanvas"></canvas>
+      <canvas id="grimeCanvas"></canvas>
+      <div class="engrave" id="engrave"></div>
+    </div>
+
+    <!-- ✅ 돌 아래 버튼 영역 -->
+    <div class="below-actions" aria-label="actions">
+      <button class="hud-btn" id="finishBtn" type="button">그만 닦기</button>
+      <a class="hud-btn" href="./collection.html">도감</a>
+    </div>
+
+    <div class="cloth" id="cloth"></div>
+
+    <div class="overlay" id="overlay">
+      <div class="overlay-card">
+        <textarea id="inputText" class="overlay-input" rows="3"
+          placeholder="당신의 초심을 한 문장으로 적어주세요."></textarea>
+
+        <div class="overlay-label">추천 예시</div>
+        <div class="overlay-examples" id="examples"></div>
+
+        <button class="overlay-btn" id="saveBtn" type="button">새기기</button>
+      </div>
+    </div>
+
+    <!-- DEBUG -->
+    <div class="debug-panel" id="debugPanel" aria-hidden="true">
+      <button data-h="0" type="button">0h</button>
+      <button data-h="6" type="button">6h</button>
+      <button data-h="12" type="button">12h</button>
+      <button data-h="18" type="button">18h</button>
+      <button data-h="24" type="button">24h</button>
+      <button data-h="null" type="button">live</button>
+    </div>
+  </main>
+
+  <script src="./src/main.js"></script>
+</body>
+</html>
