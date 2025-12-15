@@ -226,7 +226,8 @@ letter-spacing: var(--engrave-tracking);
 
 .overlay-label{
   margin-top:12px;
-  font-size:12px;
+  margin-left: 10px;
+  font-size:14px;
   letter-spacing:0.08em;
   color: rgba(0,0,0,0.45);
 }
@@ -501,4 +502,56 @@ letter-spacing: var(--engrave-tracking);
     gap: 12px;
     padding: 16px 0 50px;
   }
+}
+
+
+/* =========================
+   FONT UNIFY PATCH
+   ✅ 이거 style.css 맨 아래에 붙여
+   - body 폰트를 form/button에도 강제로 상속
+========================= */
+
+/* body 폰트를 변수로 만들어두면 나중에 바꾸기도 쉬움 */
+:root{
+  --ui-font: "sandoll-myeongjoneo1", sans-serif;
+}
+
+/* 전체 기본 */
+html, body{
+  font-family: var(--ui-font);
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ✅ form/버튼류는 기본적으로 OS 폰트를 써서 따로 박아줘야 함 */
+button,
+input,
+textarea,
+select{
+  font: inherit;              /* 핵심: 폰트/굵기/크기 다 상속 */
+  letter-spacing: inherit;    /* 필요하면 */
+  color: inherit;
+}
+
+/* placeholder도 동일 톤 */
+textarea::placeholder,
+input::placeholder{
+  font-family: var(--ui-font);
+  font-weight: 400;
+  color: rgba(0,0,0,0.35);
+}
+
+/* 버튼 기본 스타일이 다른 브라우저에서 튀는 거 방지 */
+button{
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+}
+
+/* 너가 만든 버튼/칩도 확실히 폰트 상속 */
+.hud-btn,
+.overlay-btn,
+.example-chip{
+  font: inherit;
 }
