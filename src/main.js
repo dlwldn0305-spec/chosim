@@ -8,20 +8,28 @@
    - ✅ 디버그: 0/6/12/18/24h 패널
    ========================= */
 const API_BASE =
-  location.hostname.endsWith("github.io")
+  location.hostname.includes("github.io")
     ? "https://chosim-backend.onrender.com"
     : "http://localhost:3001";
 
 async function requestMutate(text, stage) {
-  const res = await fetch(`${API_BASE}/api/mutate`, {
+  const url = `${API_BASE}/api/mutate`;
+  console.log("MUTATE URL =", url); // 이거 꼭!
+
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text, stage }),
   });
 
-  if (!res.ok) throw new Error("mutate failed");
+  if (!res.ok) {
+    const t = await res.text().catch(() => "");
+    throw new Error(`mutate failed (${res.status}) ${t}`);
+  }
+
   return res.json();
 }
+
 
     
 function normalizeInput(text) {
