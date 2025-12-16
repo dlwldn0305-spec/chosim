@@ -7,7 +7,12 @@
    - ✅ 동반자 멘트: 시간 단계별
    - ✅ 디버그: 0/6/12/18/24h 패널
    ========================= */
+const API_BASE =
+  location.hostname.endsWith("github.io")
+    ? "https://chosim-backend.onrender.com"
+    : "";
 
+    
 function normalizeInput(text) {
   return (text || "")
     .replace(/["'“”‘’]/g, "")
