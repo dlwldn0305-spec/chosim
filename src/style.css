@@ -198,6 +198,7 @@ letter-spacing: var(--engrave-tracking);
   z-index: 80;
   background: #fafafa;
   backdrop-filter: none;
+  
 }
 
 .overlay[aria-hidden="true"]{ display:none; }
@@ -237,6 +238,7 @@ letter-spacing: var(--engrave-tracking);
   display:flex;
   flex-wrap:wrap;
   gap:8px;
+  font-size:14px;
 }
 
 .example-chip{
@@ -256,7 +258,7 @@ letter-spacing: var(--engrave-tracking);
   color:#fff;
   border-radius:14px;
   padding:13px 12px;
-  font-size:15px;
+  font-size:14px;
   letter-spacing:0.06em;
 }
 
@@ -292,7 +294,8 @@ letter-spacing: var(--engrave-tracking);
 /* PC */
 @media (min-width: 1024px){
   .top-bar{ top: 28px; }
-  .stage{ padding-top: 46px; }
+  .stage{ padding-top: 46px; 
+  }
 }
 
 

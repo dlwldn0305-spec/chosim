@@ -27,7 +27,9 @@ async function requestMutate(text, stage) {
     throw new Error(`mutate failed (${res.status}) ${t}`);
   }
 
-  return res.json();
+  const data = await res.json();
+return data?.result ?? "";
+
 }
 
 
@@ -65,6 +67,7 @@ const debugPanel = document.getElementById("debugPanel"); // ✅ 존재하면 �
 
 const STONE_SCALE = 0.8;
 
+
 /* ---------- Storage Keys ---------- */
 const KEY_TEXT = "choshim_text_v2";
 const KEY_LAST_CLEAN = "choshim_last_clean_v2";
@@ -74,6 +77,7 @@ const KEY_MUTATED = "choshim_mutated_by_stage_v3_noquote";
 
 /* ✅ 도감 */
 const KEY_BOOK = "choshim_book_v1";
+
 
 /* ---------- Const ---------- */
 const ONE_HOUR = 60 * 60 * 1000;
@@ -608,20 +612,7 @@ function setClothAt(clientX, clientY, show) {
   cloth.style.opacity = "1";
 }
 
-/* =========================
-   API mutate (fetch)
-========================= */
-async function requestMutate(text, stage) {
-  const res = await fetch("/api/mutate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, stage })
-  });
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok || !data.ok) throw new Error(data.error || "mutate failed");
-  return (data.result || "").toString();
-}
 
 /* =========================
    Mutation cache
@@ -986,48 +977,52 @@ function updateFinishBtn() {
 }
 /* =========================
    Debug keys (KEYBOARD)
-   ========================= */
+   - 0/1/2/3/4 : 0/6/12/18/24h 단계로 즉시 이동
+   - R : 완전 초기화(새 돌 + 입력창으로)
+========================= */
 function setupDebugKeys() {
   window.addEventListener("keydown", (e) => {
+    // 입력 중에는 방해 안 하게
+    const t = e.target;
+    const isTyping =
+      t &&
+      (t.tagName === "INPUT" ||
+        t.tagName === "TEXTAREA" ||
+        t.isContentEditable);
 
-    /* ----- 시간 단계 강제 ----- */
-    // 0h
-    if (e.code === "Digit0") debugOverrideHours = 0;
-    // 6h
-    if (e.code === "Digit1") debugOverrideHours = 6;
-    // 12h
-    if (e.code === "Digit2") debugOverrideHours = 12;
-    // 18h
-    if (e.code === "Digit3") debugOverrideHours = 18;
-    // 24h (완전 방치)
-    if (e.code === "Digit4") debugOverrideHours = 24;
+    if (isTyping) return;
 
-    // 디버그 해제 (실시간으로 돌아감)
-    if (e.code === "Digit9") debugOverrideHours = null;
-
-    /* ----- 화면 갱신 ----- */
-    const isTimeKey = [
-      "Digit0",
-      "Digit1",
-      "Digit2",
-      "Digit3",
-      "Digit4",
-      "Digit9",
-    ].includes(e.code);
-
-    if (isTimeKey) {
-      // 오염 다시 그림
-      drawGrime(true);
-
-      // HUD / 멘트 / 각인 전부 갱신
-      updateHud();
-      updateCompanion(true);
-
-      lastStage = null;
-      updateEngraveByStage();
+    // R 누르면 완전 초기화
+    if (e.key === "r" || e.key === "R") {
+      e.preventDefault();
+      acceptCleanToResetFlow();
+      return;
     }
+
+    // 0~4 누르면 단계 이동 (0/6/12/18/24h)
+    const map = {
+      Digit0: 0, Digit1: 6, Digit2: 12, Digit3: 18, Digit4: 24,
+      Numpad0: 0, Numpad1: 6, Numpad2: 12, Numpad3: 18, Numpad4: 24,
+    };
+
+    const hours = map[e.code];
+    if (hours === undefined) return;
+
+    e.preventDefault();
+
+    // ✅ 여기서 "가짜 시간"을 강제로 넣어 스테이지를 바꿈
+    debugOverrideHours = hours;
+
+    // ✅ 화면/문구/각인까지 전부 재계산
+    drawGrime(true);
+    updateHud();
+    updateCompanion(true);
+
+    lastStage = null;        // stage 캐시 무효화
+    updateEngraveByStage();  // elapsedSinceClean()가 debugOverrideHours로 계산됨
   });
 }
+
 
 /* =========================
    Debug panel (5탭 열기)
