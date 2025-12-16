@@ -10,7 +10,18 @@
 const API_BASE =
   location.hostname.endsWith("github.io")
     ? "https://chosim-backend.onrender.com"
-    : "";
+    : "http://localhost:3001";
+
+async function requestMutate(text, stage) {
+  const res = await fetch(`${API_BASE}/api/mutate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, stage }),
+  });
+
+  if (!res.ok) throw new Error("mutate failed");
+  return res.json();
+}
 
     
 function normalizeInput(text) {
